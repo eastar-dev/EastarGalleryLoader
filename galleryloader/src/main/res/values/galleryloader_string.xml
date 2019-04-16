@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+
+    <string-array name="camera_or_gallery">
+        <item>@string/camera</item>
+        <item>@string/gallery</item>
+    </string-array>
+</resources>

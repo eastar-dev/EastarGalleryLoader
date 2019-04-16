@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--<files-path name="name" path="path" /> &lt;!&ndash; Context.getFilesDir(). &ndash;&gt;-->
+    <!--<cache-path name="name" path="path" /> &lt;!&ndash; getCacheDir(). &ndash;&gt;-->
+    <!--<external-path name="Download" path="Download" />&lt;!&ndash; Environment.getExternalStorageDirectory(). &ndash;&gt;-->
+    <!--<external-path name="temp" path="files/temp" /> &lt;!&ndash; Environment.getExternalStorageDirectory(). &ndash;&gt;-->
+    <!--<external-files-path name="temp" path="galleryloader/temp/" /> &lt;!&ndash; Context#getExternalFilesDir(String) Context.getExternalFilesDir(null). &ndash;&gt;-->
+    <external-files-path name="gloader" path="galleryloader/" /> <!-- Context#getExternalFilesDir(String) Context.getExternalFilesDir(null). -->
+    <external-files-path name="gtemp" path="galleryloader/temp/" /> <!-- Context#getExternalFilesDir(String) Context.getExternalFilesDir(null). -->
+    <!--<external-cache-path name="temp" path="temp" /> &lt;!&ndash; Context.getExternalCacheDir(). &ndash;&gt;-->
+</paths>

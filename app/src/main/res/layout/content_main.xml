@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <Button
+        android:id="@+id/GALLERY_LOADER_BY_CAMERA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="GALLERY_LOADER_BY_CAMERA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/GALLERY_LOADER_BY_GALLERY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="GALLERY_LOADER_BY_GALLERY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GALLERY_LOADER_BY_CAMERA" />
+
+    <Button
+        android:id="@+id/GALLERY_LOADER_BY_CAMERA_CROP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="GALLERY_LOADER_BY_CAMERA_CROP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GALLERY_LOADER_BY_GALLERY" />
+
+    <Button
+        android:id="@+id/GALLERY_LOADER_BY_GALLERY_CROP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="GALLERY_LOADER_BY_GALLERY_CROP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GALLERY_LOADER_BY_CAMERA_CROP" />
+
+    <Button
+        android:id="@+id/GALLERY_LOADER_BY_SELECT_CROP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="GALLERY_LOADER_BY_SELECT_CROP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GALLERY_LOADER_BY_GALLERY_CROP" />
+</android.support.constraint.ConstraintLayout>
