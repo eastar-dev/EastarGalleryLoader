@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -29,21 +30,11 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        GALLERY_LOADER_BY_CAMERA.setOnClickListener {
-            GALLERY_LOADER_BY_CAMERA()
-        }
-        GALLERY_LOADER_BY_GALLERY.setOnClickListener {
-            GALLERY_LOADER_BY_GALLERY()
-        }
-        GALLERY_LOADER_BY_CAMERA_CROP.setOnClickListener {
-            GALLERY_LOADER_BY_CAMERA_CROP()
-        }
-        GALLERY_LOADER_BY_GALLERY_CROP.setOnClickListener {
-            GALLERY_LOADER_BY_GALLERY_CROP()
-        }
-        GALLERY_LOADER_BY_SELECT_CROP.setOnClickListener {
-            GALLERY_LOADER_BY_SELECT_CROP()
-        }
+        GALLERY_LOADER_BY_CAMERA.setOnClickListener { GALLERY_LOADER_BY_CAMERA() }
+        GALLERY_LOADER_BY_GALLERY.setOnClickListener { GALLERY_LOADER_BY_GALLERY() }
+        GALLERY_LOADER_BY_CAMERA_CROP.setOnClickListener { GALLERY_LOADER_BY_CAMERA_CROP() }
+        GALLERY_LOADER_BY_GALLERY_CROP.setOnClickListener { GALLERY_LOADER_BY_GALLERY_CROP() }
+        GALLERY_LOADER_BY_SELECT_CROP.setOnClickListener { GALLERY_LOADER_BY_SELECT_CROP() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,10 +48,7 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> {
-                startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
-                true
-            }
+            R.id.action_settings -> startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))).let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -112,8 +100,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setImage(uri: Uri?) {
         Log.e(uri)
+        Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         image.setImageURI(uri)
-
     }
 
 }
