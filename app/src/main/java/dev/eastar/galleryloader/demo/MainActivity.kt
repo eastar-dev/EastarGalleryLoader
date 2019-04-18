@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         GalleryLoader.builder(activity)
 //                .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.Source.CAMERA)
-                .setOnGalleryLoadedListener(this::showToast)
+                .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
     }
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         GalleryLoader.builder(activity)
 //                .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.Source.GALLERY)
-                .setOnGalleryLoadedListener(this::showToast)
+                .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
     }
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         GalleryLoader.builder(activity)
                 .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.Source.CAMERA)
-                .setOnGalleryLoadedListener(this::showToast)
+                .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
     }
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         GalleryLoader.builder(activity)
                 .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.Source.GALLERY)
-                .setOnGalleryLoadedListener(this::showToast)
+                .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
     }
@@ -105,13 +105,15 @@ class MainActivity : AppCompatActivity() {
         GalleryLoader.builder(activity)
                 .setCrop(true, 100, 100)
 //                .setSource(GalleryLoader.eSource.GALLERY)
-                .setOnGalleryLoadedListener(this::showToast)
+                .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
     }
 
-    private fun showToast(uri: Uri?) {
+    private fun setImage(uri: Uri?) {
         Log.e(uri)
+        image.setImageURI(uri)
+
     }
 
 }
