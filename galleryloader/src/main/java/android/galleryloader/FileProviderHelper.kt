@@ -1,7 +1,7 @@
 package android.galleryloader
 
 import android.content.Context
-import android.log.Log
+//import android.log.Log
 import android.net.Uri
 import android.support.v4.content.FileProvider
 import java.io.File
@@ -53,7 +53,7 @@ object FileProviderHelper {
             val result = dir.mkdirs()
             if (!result)
                 throw NullPointerException("!dir folder create fail")
-            Log.e("mkdirs", result, dir)
+//            Log.e("mkdirs", result, dir)
         }
         return dir
     }
@@ -69,7 +69,7 @@ object FileProviderHelper {
             if (name in uri.path!!) {
                 val pathname = uri.path!!.replaceFirst(name, folder)
                 val file = File(getRootFolder(context), pathname)
-                Log.e(file to uri)
+//                Log.e(file to uri)
                 return file
             }
         }
@@ -79,7 +79,7 @@ object FileProviderHelper {
     private fun toUri(context: Context, file: File): Uri {
         val authority = context.packageName + PROVIDER
         val uri = FileProvider.getUriForFile(context, authority, file)
-        Log.e(uri to file)
+//        Log.e(uri to file)
         return uri
     }
 
@@ -94,7 +94,7 @@ object FileProviderHelper {
         val authority = context.packageName + PROVIDER
         val file = createTempFile(context, prefix, suffix)
         val uri = FileProvider.getUriForFile(context, authority, file)
-        Log.e(uri to file)
+//        Log.e(uri to file)
         return uri
     }
 

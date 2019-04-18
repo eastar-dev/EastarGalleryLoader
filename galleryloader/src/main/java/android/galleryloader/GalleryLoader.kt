@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.log.Log
+//import android.log.Log
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -137,7 +137,7 @@ class GalleryLoader : AppCompatActivity() {
                 grantUriPermission(resolveInfo.activityInfo.packageName, sourceUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 grantUriPermission(resolveInfo.activityInfo.packageName, targetUri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             } catch (e: Exception) {
-                Log.w(resolveInfo)
+//                Log.w(resolveInfo)
             }
         }
         val size = list.size
@@ -153,11 +153,11 @@ class GalleryLoader : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 //        Log.e(requestCode, resultCode, data)
         val result = if (resultCode == Activity.RESULT_OK) "RESULT_OK" else "RESULT_CANCELED"
-        when (requestCode) {
-            REQ_GALLERY -> Log.e(result, "REQ_GALLERY", data?.data)
-            REQ_CROP -> Log.e(result, "REQ_CROP", mTragetUri)
-            REQ_CAMERA -> Log.e(result, "REQ_CAMERA", mTragetUri)
-        }
+//        when (requestCode) {
+//            REQ_GALLERY -> Log.e(result, "REQ_GALLERY", data?.data)
+//            REQ_CROP -> Log.e(result, "REQ_CROP", mTragetUri)
+//            REQ_CAMERA -> Log.e(result, "REQ_CAMERA", mTragetUri)
+//        }
 
 
         if (resultCode != Activity.RESULT_OK) {
@@ -183,7 +183,7 @@ class GalleryLoader : AppCompatActivity() {
     }
 
     private fun fire(data: Uri?) {
-        Log.p(if (data == null) Log.WARN else Log.INFO, data ?: Uri.EMPTY)
+//        Log.p(if (data == null) Log.WARN else Log.INFO, data ?: Uri.EMPTY)
         GalleryLoaderObserver.notifyObservers(data)
         FileProviderHelper.deleteTempFolder(this)
         finish()
