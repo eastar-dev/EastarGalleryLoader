@@ -15,7 +15,7 @@
  */
 
 
-package android.galleryloader
+package dev.eastar.galleryloader
 
 import java.util.*
 

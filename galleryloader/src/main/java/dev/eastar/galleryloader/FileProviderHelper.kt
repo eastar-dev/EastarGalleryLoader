@@ -15,7 +15,7 @@
  */
 
 
-package android.galleryloader
+package dev.eastar.galleryloader
 
 import android.content.Context
 //import android.log.Log
@@ -45,7 +45,7 @@ import java.util.*
  *         </provider>
  *
  *         <activity
- *             android:name="android.galleryloader.GalleryLoader"
+ *             android:name="dev.eastar.galleryloader.GalleryLoader"
  *             android:theme="@style/GalleryLoaderTheme" />
  *
  *     </application>

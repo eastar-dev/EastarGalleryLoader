@@ -15,12 +15,11 @@
  */
 
 
-package android.galleryloader
+package dev.eastar.galleryloader
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 //import android.log.Log
 import android.net.Uri
@@ -28,7 +27,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import dev.eastar.galleryloader.R
 
 import java.util.*
 

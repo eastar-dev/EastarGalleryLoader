@@ -1,4 +1,4 @@
-package com.example.djrain.permissiontester
+package dev.eastar.galleryloader.demo
 
 import org.junit.Test
 

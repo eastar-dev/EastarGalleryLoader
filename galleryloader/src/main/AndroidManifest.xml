@@ -32,7 +32,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity
-            android:name="android.galleryloader.GalleryLoader"
+            android:name=".GalleryLoader"
             android:theme="@style/GalleryLoaderTheme" />
     </application>
 </manifest>

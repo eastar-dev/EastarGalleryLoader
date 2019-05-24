@@ -19,7 +19,7 @@ package dev.eastar.galleryloader.demo
 
 import android.content.Context
 import android.content.Intent
-import android.galleryloader.GalleryLoader
+import dev.eastar.galleryloader.GalleryLoader
 import android.log.Log
 import android.net.Uri
 import android.os.Bundle

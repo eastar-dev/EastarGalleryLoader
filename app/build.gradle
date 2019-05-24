@@ -36,7 +36,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-//    releaseImplementation 'com.github.djrain:permission:2.2.0'
     debugImplementation project(':galleryloader')
     releaseImplementation 'com.github.djrain:EastarGalleryloader:1.0.0'
     implementation 'com.github.djrain:log:3.0.4'
