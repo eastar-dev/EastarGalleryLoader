@@ -25,8 +25,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 
 import java.util.*
 
@@ -74,25 +74,22 @@ class GalleryLoader : AppCompatActivity() {
         }
     }
 
-    enum class Source {
-        CAMERA, GALLERY, UNKNOWN
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         load()
+
     }
 
     private fun load() {
-        val from = intent?.getSerializableExtra(EXTRA.SOURCE)
-        when (from) {
-            Source.GALLERY -> startGallery()
-            Source.CAMERA -> startCamera()
+        when (intent?.getStringExtra(EXTRA.SOURCE)) {
+            getString(R.string.gallery) -> startGallery()
+            getString(R.string.camera) -> startCamera()
             else -> {
                 AlertDialog.Builder(this@GalleryLoader)
                         .setTitle("Select from?")
                         .setItems(R.array.camera_or_gallery) { _, position ->
-                            intent?.putExtra(EXTRA.SOURCE, Source.values()[position])
+                            val from = resources.getStringArray(R.array.camera_or_gallery)[position]
+                            intent?.putExtra(EXTRA.SOURCE, from)
                             load()
                         }
                         .setOnCancelListener { finish() }
@@ -174,7 +171,6 @@ class GalleryLoader : AppCompatActivity() {
 //            REQ_CAMERA -> Log.e(result, "REQ_CAMERA", mTragetUri)
 //        }
 
-
         if (resultCode != Activity.RESULT_OK) {
             fire(null)
             return
@@ -207,7 +203,7 @@ class GalleryLoader : AppCompatActivity() {
     class Builder internal constructor(private val context: Context) {
         private var mOnGalleryLoadedListener: ((Uri) -> Unit)? = null
         private var mOnCancelListener: (() -> Unit)? = null
-        private var mSource: Source = Source.UNKNOWN
+        private var mSource = ""
         private var isCrop = false
         private var width = 0
         private var height = 0
@@ -233,7 +229,7 @@ class GalleryLoader : AppCompatActivity() {
             return this
         }
 
-        fun setSource(source: Source): Builder {
+        fun setSource(source: String): Builder {
             mSource = source
             return this
         }
