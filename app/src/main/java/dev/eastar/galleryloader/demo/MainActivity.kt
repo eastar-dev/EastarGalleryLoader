@@ -19,16 +19,16 @@ package dev.eastar.galleryloader.demo
 
 import android.content.Context
 import android.content.Intent
-import dev.eastar.galleryloader.GalleryLoader
 import android.log.Log
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import dev.eastar.galleryloader.GalleryLoader
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     fun GALLERY_LOADER_BY_CAMERA() {
         GalleryLoader.builder(activity)
 //                .setCrop(true, 100, 100)
-                .setSource(GalleryLoader.Source.CAMERA)
+                .setSource(getString(R.string.camera))
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     fun GALLERY_LOADER_BY_GALLERY() {
         GalleryLoader.builder(activity)
 //                .setCrop(true, 100, 100)
-                .setSource(GalleryLoader.Source.GALLERY)
+                .setSource(getString(R.string.gallery))
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     fun GALLERY_LOADER_BY_CAMERA_CROP() {
         GalleryLoader.builder(activity)
                 .setCrop(true, 100, 100)
-                .setSource(GalleryLoader.Source.CAMERA)
+                .setSource(getString(R.string.camera))
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     fun GALLERY_LOADER_BY_GALLERY_CROP() {
         GalleryLoader.builder(activity)
                 .setCrop(true, 100, 100)
-                .setSource(GalleryLoader.Source.GALLERY)
+                .setSource(getString(R.string.gallery))
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
                 .load()
