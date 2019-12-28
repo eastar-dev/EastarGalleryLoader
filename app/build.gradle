@@ -38,5 +38,5 @@ dependencies {
 
     debugImplementation project(':galleryloader')
     releaseImplementation 'com.github.djrain:EastarGalleryLoader:1.0.4'
-    implementation 'com.github.djrain:EastarLog:4.0.2'
+    implementation 'com.github.djrain:EastarLog:4.0.3'
 }

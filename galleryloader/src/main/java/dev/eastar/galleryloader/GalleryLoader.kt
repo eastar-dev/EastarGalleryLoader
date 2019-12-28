@@ -58,20 +58,16 @@ class GalleryLoader : AppCompatActivity() {
         const val REQ_CAMERA = 4901
         const val REQ_GALLERY = 4902
         const val REQ_CROP = 4913
+
+        const val EXTRA_CROP = "CROP"
+        const val EXTRA_SOURCE = "SOURCE"
+        const val EXTRA_SOURCE_GALLERY = "SOURCE_GALLERY"
+        const val EXTRA_SOURCE_CAMERA = "SOURCE_CAMERA"
+        const val EXTRA_CROP_WIDTH = "CROP_WIDTH"
+        const val EXTRA_CROP_HEIGHT = "CROP_HEIGHT"
         @JvmStatic
         fun builder(context: Context): Builder {
             return Builder(context)
-        }
-    }
-
-    interface EXTRA {
-        companion object {
-            const val CROP = "CROP"
-            const val SOURCE = "SOURCE"
-            const val SOURCE_GALLERY = "SOURCE_GALLERY"
-            const val SOURCE_CAMERA = "SOURCE_CAMERA"
-            const val CROP_WIDTH = "CROP_WIDTH"
-            const val CROP_HEIGHT = "CROP_HEIGHT"
         }
     }
 
@@ -82,14 +78,14 @@ class GalleryLoader : AppCompatActivity() {
     }
 
     private fun load() {
-        when (intent?.getStringExtra(EXTRA.SOURCE)) {
-            EXTRA.SOURCE_GALLERY -> startGallery()
-            EXTRA.SOURCE_CAMERA -> startCamera()
+        when (intent?.getStringExtra(EXTRA_SOURCE)) {
+            EXTRA_SOURCE_GALLERY -> startGallery()
+            EXTRA_SOURCE_CAMERA -> startCamera()
             else -> {
                 AlertDialog.Builder(this@GalleryLoader)
                         .setTitle("Select from?")
                         .setItems(R.array.camera_or_gallery) { _, position ->
-                            intent?.putExtra(EXTRA.SOURCE, if (position == 0) EXTRA.SOURCE_CAMERA else EXTRA.SOURCE_GALLERY)
+                            intent?.putExtra(EXTRA_SOURCE, if (position == 0) EXTRA_SOURCE_CAMERA else EXTRA_SOURCE_GALLERY)
                             load()
                         }
                         .setOnCancelListener { finish() }
@@ -162,11 +158,11 @@ class GalleryLoader : AppCompatActivity() {
             fire(null)
             return
         }
-        val crop = intent?.getBooleanExtra(EXTRA.CROP, false) ?: false
+        val crop = intent?.getBooleanExtra(EXTRA_CROP, false) ?: false
         if (crop) {
-            intent?.putExtra(EXTRA.CROP, false)
-            val w = intent?.getIntExtra(EXTRA.CROP_WIDTH, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
-            val h = intent?.getIntExtra(EXTRA.CROP_HEIGHT, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
+            intent?.putExtra(EXTRA_CROP, false)
+            val w = intent?.getIntExtra(EXTRA_CROP_WIDTH, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
+            val h = intent?.getIntExtra(EXTRA_CROP_HEIGHT, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
             when (requestCode) {
                 REQ_GALLERY -> startCrop(FileProviderHelper.copyForCrop(this, data?.data), w, h)
                 REQ_CAMERA -> startCrop(mTragetUri, w, h)
@@ -176,14 +172,14 @@ class GalleryLoader : AppCompatActivity() {
 
         when (requestCode) {
             REQ_GALLERY -> fire(data?.data)
-            REQ_CROP, REQ_CAMERA -> fire(FileProviderHelper.moveForResult(this, mTragetUri))
+            REQ_CROP, REQ_CAMERA -> fire(FileProviderHelper.copyForResult(this, mTragetUri))
         }
     }
 
     private fun fire(data: Uri?) {
         //Log.p(if (data == null) Log.WARN else Log.INFO, data ?: Uri.EMPTY)
         GalleryLoaderObserver.notifyObservers(data)
-        FileProviderHelper.deleteTempFolder(this)
+        //FileProviderHelper.deleteTempFolder(this)
         finish()
     }
 
@@ -228,10 +224,10 @@ class GalleryLoader : AppCompatActivity() {
             })
 
             Intent(context, GalleryLoader::class.java).apply {
-                putExtra(EXTRA.CROP, isCrop && !android.os.Build.MODEL.contains("Android SDK"))
-                putExtra(EXTRA.CROP_WIDTH, width)
-                putExtra(EXTRA.CROP_HEIGHT, height)
-                putExtra(EXTRA.SOURCE, mSource)
+                putExtra(EXTRA_CROP, isCrop && !android.os.Build.MODEL.contains("Android SDK"))
+                putExtra(EXTRA_CROP_WIDTH, width)
+                putExtra(EXTRA_CROP_HEIGHT, height)
+                putExtra(EXTRA_SOURCE, mSource)
             }.also {
                 context.startActivity(it)
             }
