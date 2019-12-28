@@ -32,9 +32,13 @@ object FileProviderHelper {
 
     @Throws(IOException::class)
     fun createTempUri(context: Context, prefix: String = "", suffix: String? = ".jpeg"): Uri {
+        val folder = File(context.getExternalFilesDir(null), GALLERYLOADER_FOLDER).also {
+            if (it.exists())
+                it.mkdirs()
+        }
         val authority = context.packageName + PROVIDER
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val file = File.createTempFile("${prefix}_${timeStamp}_", suffix, File(context.getExternalFilesDir(null), GALLERYLOADER_FOLDER))
+        val file = File.createTempFile("${prefix}_${timeStamp}_", suffix, folder)
         val uri = FileProvider.getUriForFile(context, authority, file)
         Log.e(uri, file)
         return uri
