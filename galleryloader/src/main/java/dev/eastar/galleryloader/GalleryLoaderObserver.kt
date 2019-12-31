@@ -26,11 +26,8 @@ object GalleryLoaderObserver : Observable() {
     }
 
     fun onceUpdate(observer: Observer) {
-//        Log.e(countObservers())
         clearChanged()
         deleteObservers()
-//        Log.e("=>")
-//        Log.w(countObservers())
 
         addObserver(object : Observer {
             override fun update(o: Observable?, arg: Any?) {
