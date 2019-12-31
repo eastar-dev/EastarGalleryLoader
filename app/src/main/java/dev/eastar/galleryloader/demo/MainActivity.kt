@@ -118,7 +118,9 @@ class MainActivity : AppCompatActivity() {
     private fun setImage(uri: Uri?) {
         Log.e(uri)
         Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
+        textView.text = uri.toString()
         image.setImageURI(uri)
+        GalleryLoader.deleteTemp(this)
     }
 
 }

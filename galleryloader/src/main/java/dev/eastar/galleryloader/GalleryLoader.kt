@@ -69,6 +69,10 @@ class GalleryLoader : AppCompatActivity() {
         fun builder(context: Context): Builder {
             return Builder(context)
         }
+
+        fun deleteTemp(context: Context) {
+            GalleryLoaderFileProvider.deleteTemp(context)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,9 +114,9 @@ class GalleryLoader : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE).apply {
             resolveActivity(packageManager)
-            mTragetUri = FileProviderHelper.createTempUri(this@GalleryLoader, "camera", ".jpg")
+            mTragetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "camera", ".jpg")
             putExtra(MediaStore.EXTRA_OUTPUT, mTragetUri)
         }.also {
             startActivityForResult(it, REQ_CAMERA)
@@ -122,7 +126,7 @@ class GalleryLoader : AppCompatActivity() {
     private lateinit var mTragetUri: Uri
 
     private fun startCrop(sourceUri: Uri, w: Int, h: Int) {
-        val targetUri = FileProviderHelper.createTempUri(this@GalleryLoader, "crop", ".jpg")
+        val targetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "crop", ".jpg")
         val intent = Intent("com.android.camera.action.CROP").apply {
             setDataAndType(sourceUri, "image/*")
             putExtra("crop", "true")
@@ -164,15 +168,15 @@ class GalleryLoader : AppCompatActivity() {
             val w = intent?.getIntExtra(EXTRA_CROP_WIDTH, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
             val h = intent?.getIntExtra(EXTRA_CROP_HEIGHT, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
             when (requestCode) {
-                REQ_GALLERY -> startCrop(FileProviderHelper.copyForCrop(this, data?.data), w, h)
+                REQ_GALLERY -> startCrop(GalleryLoaderFileProvider.copyForCrop(this, data?.data), w, h)
                 REQ_CAMERA -> startCrop(mTragetUri, w, h)
             }
             return
         }
 
         when (requestCode) {
-            REQ_GALLERY -> fire(data?.data)
-            REQ_CROP, REQ_CAMERA -> fire(FileProviderHelper.copyForResult(this, mTragetUri))
+            REQ_GALLERY -> fire(GalleryLoaderFileProvider.copyForResult(this, data?.data))
+            REQ_CROP, REQ_CAMERA -> fire(GalleryLoaderFileProvider.copyForResult(this, mTragetUri))
         }
     }
 

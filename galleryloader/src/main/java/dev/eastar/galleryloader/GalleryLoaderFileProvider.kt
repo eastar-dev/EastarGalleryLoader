@@ -26,7 +26,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-object FileProviderHelper {
+object GalleryLoaderFileProvider {
     private const val PROVIDER = ".galleryloader_provider"
     private const val GALLERYLOADER_FOLDER = "galleryloader/"
 
@@ -64,5 +64,25 @@ object FileProviderHelper {
             }
         }
         return result
+    }
+
+    fun deleteTemp(context: Context) {
+        val source = File(context.getExternalFilesDir(null), GALLERYLOADER_FOLDER).also {
+            if (!it.exists())
+                return
+        }
+        val target = File(context.getExternalFilesDir(null), UUID.randomUUID().toString())
+        if (source.renameTo(target))
+            deleteRecursive(target)
+    }
+
+    private fun deleteRecursive(maybeFolder: File) {
+        maybeFolder.listFiles()?.forEach {
+            if (maybeFolder.isDirectory)
+                deleteRecursive(it)
+            else
+                it.delete()
+        }
+        maybeFolder.delete()
     }
 }
