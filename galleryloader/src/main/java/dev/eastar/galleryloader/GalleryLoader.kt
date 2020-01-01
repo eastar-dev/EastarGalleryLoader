@@ -70,8 +70,8 @@ class GalleryLoader : AppCompatActivity() {
             return Builder(context)
         }
 
-        fun deleteTemp(context: Context) {
-            GalleryLoaderFileProvider.deleteTemp(context)
+        fun deleteTemps(context: Context) {
+            GalleryLoaderFileProvider.deleteTemps(context)
         }
     }
 
