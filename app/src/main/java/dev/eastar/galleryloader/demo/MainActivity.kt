@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         textView.text = uri.toString()
         image.setImageURI(uri)
-        GalleryLoader.deleteTemp(this)
+        GalleryLoader.deleteTemps(this)
     }
 
 }

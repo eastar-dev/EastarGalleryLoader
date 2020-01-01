@@ -18,7 +18,6 @@
 package dev.eastar.galleryloader
 
 import android.content.Context
-import android.log.Log
 import android.net.Uri
 import androidx.core.content.FileProvider
 import java.io.File
@@ -33,14 +32,13 @@ object GalleryLoaderFileProvider {
     @Throws(IOException::class)
     fun createTempUri(context: Context, prefix: String = "", suffix: String? = ".jpeg"): Uri {
         val folder = File(context.getExternalFilesDir(null), GALLERYLOADER_FOLDER).also {
-            if (it.exists())
+            if (!it.exists())
                 it.mkdirs()
         }
         val authority = context.packageName + PROVIDER
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val file = File.createTempFile("${prefix}_${timeStamp}_", suffix, folder)
         val uri = FileProvider.getUriForFile(context, authority, file)
-        Log.e(uri, file)
         return uri
     }
 
@@ -66,7 +64,7 @@ object GalleryLoaderFileProvider {
         return result
     }
 
-    fun deleteTemp(context: Context) {
+    fun deleteTemps(context: Context) {
         val source = File(context.getExternalFilesDir(null), GALLERYLOADER_FOLDER).also {
             if (!it.exists())
                 return
