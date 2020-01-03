@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
 import java.util.*
 
 /**
@@ -34,8 +33,8 @@ import java.util.*
  *<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
  *
  *GalleryLoader.builder(activity)
- *  .setCrop(true, 100, 100)
- *  .setSource(GalleryLoader.Source.CAMERA)
+ *  .setCrop(100, 100, true)
+ *  .setSource(GalleryLoader.EXTRA_SOURCE_GALLERY)
  *  .setOnGalleryLoadedListener(this::showToast)
  *  .setOnCancelListener { Log.toast(activity, "canceled") }
  *  .load()
@@ -69,16 +68,13 @@ class GalleryLoader : AppCompatActivity() {
         fun builder(context: Context): Builder {
             return Builder(context)
         }
-
-        fun deleteTemps(context: Context) {
-            GalleryLoaderFileProvider.deleteTemps(context)
-        }
     }
+
+    private lateinit var targetUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         load()
-
     }
 
     private fun load() {
@@ -87,7 +83,7 @@ class GalleryLoader : AppCompatActivity() {
             EXTRA_SOURCE_CAMERA -> startCamera()
             else -> {
                 AlertDialog.Builder(this@GalleryLoader)
-                        .setTitle("Select from?")
+                        .setTitle(R.string.select)
                         .setItems(R.array.camera_or_gallery) { _, position ->
                             intent?.putExtra(EXTRA_SOURCE, if (position == 0) EXTRA_SOURCE_CAMERA else EXTRA_SOURCE_GALLERY)
                             load()
@@ -107,23 +103,20 @@ class GalleryLoader : AppCompatActivity() {
     private fun startGallery() {
         Intent(Intent.ACTION_PICK).apply {
             setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.CONTENT_TYPE)
-            resolveActivity(packageManager)
         }.also {
             startActivityForResult(it, REQ_GALLERY)
         }
     }
 
     private fun startCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE).apply {
-            resolveActivity(packageManager)
-            mTragetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "camera", ".jpg")
-            putExtra(MediaStore.EXTRA_OUTPUT, mTragetUri)
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            val targetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "camera", ".jpg")
+            putExtra(MediaStore.EXTRA_OUTPUT, targetUri)
+            this@GalleryLoader.targetUri = targetUri
         }.also {
             startActivityForResult(it, REQ_CAMERA)
         }
     }
-
-    private lateinit var mTragetUri: Uri
 
     private fun startCrop(sourceUri: Uri, w: Int, h: Int) {
         val targetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "crop", ".jpg")
@@ -140,19 +133,21 @@ class GalleryLoader : AppCompatActivity() {
             putExtra("outputFormat", Bitmap.CompressFormat.JPEG.name) //Bitmap 형태로 받기 위해 해당 작업 진행
             addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)//for google+
         }
-        val cropIntents = packageManager.queryIntentActivities(intent, 0)
-        cropIntents.forEach {
+
+        val cropActivities = packageManager.queryIntentActivities(intent, 0)
+        cropActivities.forEach {
             runCatching {
                 grantUriPermission(it.activityInfo.packageName, sourceUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 grantUriPermission(it.activityInfo.packageName, targetUri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             }
         }
-        if (cropIntents.isEmpty()) {
+
+        if (cropActivities.isEmpty()) {
             fire(null)
             return
         }
 
-        mTragetUri = targetUri
+        this.targetUri = targetUri
         startActivityForResult(intent, REQ_CROP)
     }
 
@@ -162,46 +157,44 @@ class GalleryLoader : AppCompatActivity() {
             fire(null)
             return
         }
+
         val crop = intent?.getBooleanExtra(EXTRA_CROP, false) ?: false
         if (crop) {
             intent?.putExtra(EXTRA_CROP, false)
             val w = intent?.getIntExtra(EXTRA_CROP_WIDTH, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
             val h = intent?.getIntExtra(EXTRA_CROP_HEIGHT, resources.displayMetrics.widthPixels) ?: resources.displayMetrics.widthPixels
             when (requestCode) {
-                REQ_GALLERY -> startCrop(GalleryLoaderFileProvider.copyForCrop(this, data?.data), w, h)
-                REQ_CAMERA -> startCrop(mTragetUri, w, h)
+                REQ_GALLERY -> startCrop(GalleryLoaderFileProvider.copyForCrop(this, Uri.parse(data?.data.toString())), w, h)
+                REQ_CAMERA -> startCrop(Uri.parse(targetUri.toString()), w, h)
             }
-            return
-        }
-
-        when (requestCode) {
-            REQ_GALLERY -> fire(GalleryLoaderFileProvider.copyForResult(this, data?.data))
-            REQ_CROP, REQ_CAMERA -> fire(GalleryLoaderFileProvider.copyForResult(this, mTragetUri))
+        } else when (requestCode) {
+            REQ_GALLERY -> fire(GalleryLoaderFileProvider.copyForResult(this, Uri.parse(data?.data.toString())))
+            REQ_CROP, REQ_CAMERA -> fire(GalleryLoaderFileProvider.copyForResult(this, Uri.parse(targetUri.toString())))
         }
     }
 
     private fun fire(data: Uri?) {
         //Log.p(if (data == null) Log.WARN else Log.INFO, data ?: Uri.EMPTY)
         GalleryLoaderObserver.notifyObservers(data)
-        //FileProviderHelper.deleteTempFolder(this)
+        GalleryLoaderFileProvider.deleteTemps(this)
         finish()
     }
 
-    class Builder internal constructor(private val context: Context) {
-        private var mOnGalleryLoadedListener: ((Uri) -> Unit)? = null
-        private var mOnCancelListener: (() -> Unit)? = null
-        private var mSource = ""
+    class Builder(private val context: Context) {
+        private var onGalleryLoadedListener: ((Uri) -> Unit)? = null
+        private var onCancelListener: (() -> Unit)? = null
+        private var source = ""
         private var isCrop = false
         private var width = 0
         private var height = 0
 
         fun setOnGalleryLoadedListener(onGalleryLoadedListener: ((Uri) -> Unit)?): Builder {
-            mOnGalleryLoadedListener = onGalleryLoadedListener
+            this.onGalleryLoadedListener = onGalleryLoadedListener
             return this
         }
 
         fun setOnCancelListener(onCancelListener: (() -> Unit)?): Builder {
-            mOnCancelListener = onCancelListener
+            this.onCancelListener = onCancelListener
             return this
         }
 
@@ -217,21 +210,22 @@ class GalleryLoader : AppCompatActivity() {
         }
 
         fun setSource(source: String): Builder {
-            mSource = source
+            this.source = source
             return this
         }
 
         fun load() {
             GalleryLoaderObserver.onceUpdate(Observer { _, arg ->
-                if (arg is Uri) mOnGalleryLoadedListener?.invoke(arg)
-                else mOnCancelListener?.invoke()
+                if (arg is Uri) onGalleryLoadedListener?.invoke(arg)
+                else onCancelListener?.invoke()
+                GalleryLoaderFileProvider.deleteTemps(context)
             })
 
             Intent(context, GalleryLoader::class.java).apply {
                 putExtra(EXTRA_CROP, isCrop && !android.os.Build.MODEL.contains("Android SDK"))
                 putExtra(EXTRA_CROP_WIDTH, width)
                 putExtra(EXTRA_CROP_HEIGHT, height)
-                putExtra(EXTRA_SOURCE, mSource)
+                putExtra(EXTRA_SOURCE, source)
             }.also {
                 context.startActivity(it)
             }

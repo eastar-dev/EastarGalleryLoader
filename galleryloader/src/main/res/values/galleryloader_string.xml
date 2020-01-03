@@ -2,6 +2,7 @@
 
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
+    <string name="select">Select from?</string>
 
     <string-array name="camera_or_gallery">
         <item>@string/camera</item>

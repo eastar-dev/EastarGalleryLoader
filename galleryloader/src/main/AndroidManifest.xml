@@ -24,7 +24,6 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.galleryloader_provider"
             android:enabled="true"
-            android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"

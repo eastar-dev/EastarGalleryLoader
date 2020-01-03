@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
 
     fun GALLERY_LOADER_BY_CAMERA() {
         GalleryLoader.builder(activity)
-//                .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.EXTRA_SOURCE_CAMERA)
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
@@ -82,7 +81,6 @@ class MainActivity : AppCompatActivity() {
 
     fun GALLERY_LOADER_BY_GALLERY() {
         GalleryLoader.builder(activity)
-//                .setCrop(true, 100, 100)
                 .setSource(GalleryLoader.EXTRA_SOURCE_GALLERY)
                 .setOnGalleryLoadedListener(this::setImage)
                 .setOnCancelListener { Log.toast(activity, "canceled") }
@@ -116,11 +114,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setImage(uri: Uri?) {
-        Log.e(uri)
         Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         textView.text = uri.toString()
         image.setImageURI(uri)
-        GalleryLoader.deleteTemps(this)
+        Log.e(uri)
     }
 
 }
