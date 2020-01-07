@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
@@ -109,12 +110,13 @@ class GalleryLoader : AppCompatActivity() {
     }
 
     private fun startCamera() {
+        targetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "camera", ".jpg")
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-            val targetUri = GalleryLoaderFileProvider.createTempUri(this@GalleryLoader, "camera", ".jpg")
+            if(Build.MODEL == "Pixel XL")
+                action = MediaStore.ACTION_IMAGE_CAPTURE_SECURE
             putExtra(MediaStore.EXTRA_OUTPUT, targetUri)
-            this@GalleryLoader.targetUri = targetUri
         }.also {
-            startActivityForResult(it, REQ_CAMERA)
+            runCatching { startActivityForResult(it, REQ_CAMERA) }
         }
     }
 
