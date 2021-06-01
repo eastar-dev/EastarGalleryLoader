@@ -16,14 +16,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.eastar.galleryloader">
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
     <application>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.galleryloader_provider"
-            android:enabled="true"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

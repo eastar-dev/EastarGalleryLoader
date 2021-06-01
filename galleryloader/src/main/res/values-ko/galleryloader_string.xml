@@ -1,10 +1,5 @@
 <resources>
-
     <string name="gallery">앨범</string>
     <string name="camera">카메라</string>
-
-    <string-array name="camera_or_gallery">
-        <item>@string/camera</item>
-        <item>@string/gallery</item>
-    </string-array>
+    <string name="select">선택 하세요?</string>
 </resources>
