@@ -5,10 +5,10 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.djrain'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 30
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -17,6 +17,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
